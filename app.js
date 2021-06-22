@@ -1,7 +1,9 @@
 const qwerty = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
-const btnReset = document.getElementsByClassName('btn__reset')[0];
+const btnReset = document.querySelector('.btn__reset');
 const ul = document.querySelector('#phrase ul');
+const overlay = document.getElementById('overlay');
+const button = document.getElementsByTagName('button');
 var missed; 
 missed = 0;
 
@@ -14,7 +16,7 @@ const phrases = [
 ];
 
 btnReset.addEventListener ('click', (e) => {
-    document.getElementById('overlay').style.display = 'none';
+    overlay.style.display = 'none';
 });
 
 function getRandomPhraseAsArray(arr) {
@@ -38,30 +40,55 @@ function addPhraseToDisplay(arr) {
 }
 addPhraseToDisplay(phraseArray);
 
-//If else must be INSIDE loop.
-// function addPhraseToDisplay(arr) {
-//     let displayPhrase = '';
-//     for (let i = 0; i < arr.length; i++){
-//         let li = document.createElement('li');
-//         let ul = document.querySelector('#phrase ul');
-//         li += `${arr[i]}`;
-//         ul.appendChild(li);
-//     }
-// }
+function checkLetter (button) {
+    let letters = document.querySelectorAll('li');
+    let match = null;
+    for ( let i = 0; i < letters.length; i++) {
+        if (button === letters[i].textContent.toLowerCase()) {
+            letters[i].classList.add('show');
+            letters[i].style.transition = '.5s ease-in';
+            match = true;
+        }
+    }; 
+    return match;
+};
 
-    // document.querySelector('#phrase ul').innerHTML = displayPhrase;
-    // return displayPhrase;
+qwerty.addEventListener ('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+        e.target.className = 'chosen';
+        e.target.disabled = true;
+        let match = checkLetter(e.target.textContent.toLowerCase());
+        
+        if (match === null) {
+            missed ++;
+            let lostLife = 5 - missed;
+            let lives = document.querySelectorAll('img');
+            lives[lostLife].setAttribute('src', 'images/lostHeart.png');
+        }
+        checkWin();
+    }
+});
 
-//addPhraseToDisplay(phraseArray);
-//console.log(addPhraseToDisplay(phraseArray));
+function checkWin () {
+    let letters = document.querySelectorAll('.letter');
+    let showLetters = document.querySelectorAll('.show');
+    let title = document.querySelector('.title');
+    
+    if (letters.length === showLetters.length){
+        overlay.className = 'win';
+        title.textContent = 'Congratulations, you won!';
+        overlay.style.display = 'flex';
+    } else if ( missed > 4){
+        overlay.className = 'lose';
+        title.textContent = 'Sorry, you lost. Better luck next time.';
+        overlay.style.display = 'flex';
+    }
+    reset();
+};
 
-//function checkLetter(button) {
-
-//}
-//To check if class is changing
-//console.log(document.getElementsByTagName('li').className);
-
-// function addPhraseToDisplay(arr) {
-//     let displayPhrase = '';
-//     for (let i = 0; i < arr.length; i++){
-//         displayPhrase += `<li> ${arr[i]} </li>`;
+function reset() {
+    btnReset.textContent = 'Play again';
+    btnReset.addEventListener('click', () => {
+    location.reload();
+    });
+};
