@@ -57,9 +57,9 @@ qwerty.addEventListener ('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
         e.target.className = 'chosen';
         e.target.disabled = true;
-        let match = checkLetter(e.target.textContent.toLowerCase());
+        let letterFound = checkLetter(e.target.textContent.toLowerCase());
         
-        if (match === null) {
+        if (letterFound === null) {
             missed ++;
             let lostLife = 5 - missed;
             let lives = document.querySelectorAll('img');
