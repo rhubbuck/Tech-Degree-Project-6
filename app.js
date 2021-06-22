@@ -20,10 +20,10 @@ btnReset.addEventListener ('click', (e) => {
 });
 
 function getRandomPhraseAsArray(arr) {
-    let randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+    let randomPhrase = arr[Math.floor(Math.random() * arr.length)];
     return randomPhrase.split('');
 }
-console.log(getRandomPhraseAsArray(phrases));
+
 const phraseArray = getRandomPhraseAsArray(phrases);
 
 function addPhraseToDisplay(arr) {
@@ -37,20 +37,20 @@ function addPhraseToDisplay(arr) {
             li.className = 'letter';
         }
     }
-}
+};
 addPhraseToDisplay(phraseArray);
 
 function checkLetter (button) {
     let letters = document.querySelectorAll('li');
-    let match = null;
+    let letterFound = null;
     for ( let i = 0; i < letters.length; i++) {
         if (button === letters[i].textContent.toLowerCase()) {
             letters[i].classList.add('show');
             letters[i].style.transition = '.5s ease-in';
-            match = true;
+            letterFound = true;
         }
-    }; 
-    return match;
+    } 
+    return letterFound;
 };
 
 qwerty.addEventListener ('click', (e) => {
